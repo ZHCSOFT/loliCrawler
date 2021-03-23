@@ -6,6 +6,7 @@ Libraries
 BeautifulSoup(bs4)
 urllib
 lxml
+requests
 
 Disclaimer
 -------
