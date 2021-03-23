@@ -18,4 +18,5 @@ Run main.py as main program
 Data source and Data type
 -------
 https://yande.re/post
+<br>
 JPG
