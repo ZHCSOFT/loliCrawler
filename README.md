@@ -1,7 +1,7 @@
 loliCrawler
 ====
 
-v1.1 single thread version
+v1.2 single thread version
 -------
 We are preparing a 2.0 version with multi-thread technology for boosting the crawler process
 
