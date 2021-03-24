@@ -4,6 +4,17 @@ import urllib
 import os
 
 
+def download_picture(target_url, file_path, file_id) -> int:
+
+    file_name = '{}{}'.format(str(file_id).zfill(8), '_pic.jpg')
+    try:
+        urllib.request.urlretrieve(target_url, filename=file_path+file_name)
+    except Exception as e:
+        print('Error!', e)
+        return 1
+    return 0
+
+
 def get_picture(target_url) -> str:
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
@@ -62,20 +73,21 @@ def get_last_page(target_url) -> int:
 
     except AttributeError as e:
         print('Error!', e)
-
+        return 1
     return last_page
 
 
 if __name__ == '__main__':
     lastPage = get_last_page('https://yande.re/post')
-    file_id = 1
+    fileID = 1
     for i in range(1, lastPage+1):
         url = 'https://yande.re/post?page=' + str(i)
         subPicList = get_sub_pictures(url)
         print('Page', i, 'Get', len(subPicList))
 
         for subPic in subPicList:
-            picture = get_picture(subPic)
-            filepath_name = '{}{}{}{}'.format('D:/Dataset/loli/', os.sep, str(file_id).zfill(8), '_pic.jpg')
-            urllib.request.urlretrieve(picture, filename=filepath_name)
-            file_id = file_id + 1
+            pictureURL = get_picture(subPic)
+            filePath = 'D:/Dataset/loli/'
+
+            download_picture(pictureURL, filePath, fileID)
+            fileID = fileID + 1
