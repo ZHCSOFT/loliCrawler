@@ -3,7 +3,7 @@ loliCrawler
 
 v1.2 single thread version
 -------
-We are preparing a 2.0 version with multi-thread technology for boosting the crawler process
+We are preparing 2.0 version with multi-thread technology for boosting the crawler process
 
 Libraries
 -------
