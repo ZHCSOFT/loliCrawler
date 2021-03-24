@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import urllib
-import os
+from concurrent.futures import ThreadPoolExecutor
 
 
 def download_picture(target_url, file_path, file_id) -> int:
@@ -13,7 +13,6 @@ def download_picture(target_url, file_path, file_id) -> int:
         print('Error!', e)
         return 1
     return 0
-
 
 def get_picture(target_url) -> str:
     headers = {
@@ -80,14 +79,17 @@ def get_last_page(target_url) -> int:
 if __name__ == '__main__':
     lastPage = get_last_page('https://yande.re/post')
     fileID = 1
-    for i in range(1, lastPage+1):
-        url = 'https://yande.re/post?page=' + str(i)
-        subPicList = get_sub_pictures(url)
-        print('Page', i, 'Get', len(subPicList))
+    with ThreadPoolExecutor(max_workers=16) as executor:
+        for i in range(1, lastPage+1):
+            url = 'https://yande.re/post?page=' + str(i)
+            sub_pic_list = get_sub_pictures(url)
+            print('Page', url, 'Get', len(sub_pic_list))
+            for subPic in sub_pic_list:
+                picture_url = get_picture(subPic)
+                filePath = 'D:/Dataset/loli/'
+                executor.submit(download_picture, picture_url, filePath, fileID)
+                # download_picture(picture_url, filePath, fileID)
+                fileID = fileID + 1
 
-        for subPic in subPicList:
-            pictureURL = get_picture(subPic)
-            filePath = 'D:/Dataset/loli/'
 
-            download_picture(pictureURL, filePath, fileID)
-            fileID = fileID + 1
+
