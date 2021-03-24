@@ -1,6 +1,10 @@
 loliCrawler
 ====
 
+v1.0 single thread version
+-------
+We are preparing a new version with multi-thread technology for boosting the crawler process
+
 Libraries
 -------
 BeautifulSoup(bs4)
