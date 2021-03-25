@@ -1,7 +1,7 @@
 loliCrawler
 ====
 
-v2.0 multiple thread version
+v2.1 multiple thread version
 -------
 We are continue develop new version with multi-thread technology for boosting the crawler process
 
@@ -24,4 +24,4 @@ Data source and Data type
 -------
 https://yande.re/post
 <br>
-JPG
+fileid(filled to 8 digits) fileCategory .JPG
