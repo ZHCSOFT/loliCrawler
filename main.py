@@ -37,8 +37,10 @@ def download_picture(target_url, file_path, file_id, file_rating) -> int:
     try:
         if not os.path.exists(full_file_path):
             urllib.request.urlretrieve(target_url, filename=full_file_path)
+            return 0
         else:
             print('Duplicated file detected, ID =', file_id)
+            return 1
     except Exception as e:
         print('Error!', e)
         return 1
@@ -106,7 +108,7 @@ def get_last_page(target_url) -> int:
                 page_label_list = page_label.split()
                 if page_label_list[0] == 'Page':
                     last_page = int(page_label_list[1])
-
+        return last_page
     except AttributeError as e:
         print('Error!', e)
         return 1
