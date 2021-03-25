@@ -3,7 +3,8 @@ loliCrawler
 
 v2.1 multiple thread version
 -------
-We are continue develop new version with multi-thread technology for boosting the crawler process
+Now you can choose to download origin file or resized file
+We are continuing to develop new version of multi-thread technology for boosting the crawler process
 
 Libraries
 -------
@@ -24,4 +25,4 @@ Data source and Data type
 -------
 https://yande.re/post
 <br>
-fileid(filled to 8 digits) fileCategory .JPG
+fileid(filled to 8 digits) fileCategory(Safe, Quentionable, Explicit) pic.JPG
