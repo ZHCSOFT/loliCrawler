@@ -25,4 +25,6 @@ Data source and Data type
 -------
 https://yande.re/post
 <br>
-_&lt;fileId(Unique, filled by 8 digits)&gt;\_&lt;fileCategory(Safe, Quentionable, Explicit)&gt;\_pic.JPG_
+JPG Image file
+<br>
+_&lt;fileId(Unique, filled by 8 digits)&gt;\_&lt;fileCategory(Safe, Quentionable, Explicit)&gt;\_pic.jpg_
