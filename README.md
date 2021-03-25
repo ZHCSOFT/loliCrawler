@@ -1,7 +1,7 @@
 loliCrawler
 ====
 
-v2.1 multiple threads version
+v2.2 multiple threads version
 -------
 Now you can choose to download origin file or resized file<br>
 We are continuing to optimize our project for boosting the crawler process
