@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import urllib
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def get_info(target_url) -> dict:
@@ -127,18 +127,38 @@ if __name__ == '__main__':
     if not os.path.exists(filePath):
         os.makedirs(filePath)
 
-    with ThreadPoolExecutor(max_workers=16) as executor:
-        for i in range(163, lastPage+1):
-            url = 'https://yande.re/post?page=' + str(i)
-            thread_1 = executor.submit(get_sub_pictures, url)
-            sub_pic_list = thread_1.result()
-            print('Page', i, 'Get', len(sub_pic_list))
-            for subPic in sub_pic_list:
-                try:
-                    picture_info = get_info(subPic)
-                    picture_url = get_picture(subPic, high_res=True)
-                    executor.submit(download_picture, picture_url, filePath, picture_info.get('id'),
-                                    picture_info.get('rating'))
-                except AttributeError as attr_e:
-                    print('Error!', attr_e, 'subPic =', subPic)
-                    continue
+    thread_list = []
+    startPage = 1
+    max_workers = 16
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        inner_begin_page = startPage
+        inner_end_page = startPage
+        while inner_begin_page <= lastPage:
+            if (inner_begin_page + max_workers) > (lastPage + 1):
+                inner_end_page = lastPage + 1
+            else:
+                inner_end_page = inner_begin_page + max_workers
+
+            for i in range(inner_begin_page, inner_end_page):
+                url = 'https://yande.re/post?page=' + str(i)
+                thread_1 = executor.submit(get_sub_pictures, url)
+                thread_list.append(thread_1)
+                sub_pic_list = thread_1.result()
+                print('Page', i, 'Get', len(sub_pic_list))
+
+            for one_thread in as_completed(thread_list):
+                sub_pic_list = one_thread.result()
+                for subPic in sub_pic_list:
+                    try:
+                        picture_info = get_info(subPic)
+                        picture_url = get_picture(subPic, high_res=True)
+                        executor.submit(download_picture, picture_url, filePath, picture_info.get('id'),
+                                        picture_info.get('rating'))
+
+                    except AttributeError as attr_e:
+                        print('Error!', attr_e, 'subPic =', subPic)
+                    except ConnectionError as conn_e:
+                        print('Error!', conn_e, 'subPic =', subPic)
+
+            inner_begin_page = inner_end_page
+            thread_list = []
