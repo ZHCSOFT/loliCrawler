@@ -1,7 +1,7 @@
 loliCrawler
 ====
 
-v2.3.0 multiple threads version
+v2.4 beta multiple threads version
 -------
 Pending debug<br>
 Now you can choose to download origin file or resized file<br>
