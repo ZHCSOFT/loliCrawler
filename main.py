@@ -3,7 +3,29 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 from typing import Union
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
+def retry_download(target_url, file_path, file_id, file_rating) -> int:
+    def _progress(block_num, block_size, total_size):
+        sys.stdout.write('\r>> Retry Download. %s %.1f%%' % (file_name,
+                                                             float(block_num * block_size) / float(total_size) * 100.0))
+        sys.stdout.flush()
+
+    file_name = '{}_{}_{}'.format(str(file_id).zfill(8), file_rating, 'pic.jpg')
+    full_file_path = file_path + file_name
+
+    if not os.path.exists(full_file_path):
+        try:
+            urllib.request.urlretrieve(target_url, full_file_path, _progress)
+        except Exception as e:
+            print('Retry error!', e, 'File ID =', file_id, 'URL =', target_url)
+            return 1
+        return 0
+    else:
+        print('Duplicated file detected, ID =', file_id)
+        return 1
 
 
 def get_info(target_url) -> dict:
@@ -51,6 +73,7 @@ def download_picture(target_url, file_path, file_id, file_rating) -> int:
         return 1
     except Exception as e:
         print('Error!', e, 'File ID =', file_id, 'URL =', target_url)
+        retry_download(target_url, file_path, file_id, file_rating)
         return 1
 
 
@@ -124,7 +147,7 @@ def get_last_page(target_url) -> int:
 if __name__ == '__main__':
     lastPage = get_last_page('https://yande.re/post')
     print('Total page:', lastPage)
-    filePath = 'D:/Dataset/loli/'
+    filePath = 'D:/Dataset/loli_small/'
     if not os.path.exists(filePath):
         os.makedirs(filePath)
 
@@ -152,7 +175,7 @@ if __name__ == '__main__':
                 for subPic in sub_pic_list:
                     try:
                         picture_info = get_info(subPic)
-                        picture_url = get_picture(subPic, high_res=True)
+                        picture_url = get_picture(subPic, high_res=False)
                         thread2 = executor.submit(download_picture, picture_url, filePath, picture_info.get('id'),
                                                   picture_info.get('rating'))
                         thread2_list.append(thread2)
