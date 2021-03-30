@@ -147,7 +147,7 @@ def get_last_page(target_url) -> int:
 if __name__ == '__main__':
     lastPage = get_last_page('https://yande.re/post')
     print('Total page:', lastPage)
-    filePath = 'D:/Dataset/loli_small/'
+    filePath = 'D:/Dataset/loli/'
     if not os.path.exists(filePath):
         os.makedirs(filePath)
 
@@ -175,7 +175,7 @@ if __name__ == '__main__':
                 for subPic in sub_pic_list:
                     try:
                         picture_info = get_info(subPic)
-                        picture_url = get_picture(subPic, high_res=False)
+                        picture_url = get_picture(subPic, high_res=True)
                         thread2 = executor.submit(download_picture, picture_url, filePath, picture_info.get('id'),
                                                   picture_info.get('rating'))
                         thread2_list.append(thread2)
